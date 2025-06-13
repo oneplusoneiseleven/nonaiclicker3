@@ -1,96 +1,179 @@
 <!DOCTYPE html>
 <html>
-  <style>
-    body {
-      background-color: black;
-      color: white;
-    }
-    .colored {
-      background-color: midnightblue;
-      color: white;
-    }
-  </style>
   <head>
-    <title>
-      Rebalanced clicker game
-    </title>
+    <title>Rebalanced clicker game</title>
+    <style>
+      body {
+        background-color: black;
+        color: white;
+      }
+      .colored {
+        background-color: midnightblue;
+        color: white;
+      }
+    </style>
   </head>
   <body>
-    <p>
-      Clicks: <span id="clicks">0</span>
-    </p>
-    <button onclick="addClicks(1)" class="colored">
-      Click
-    </button>
+    <p>Clicks: <span id="clicks">0</span></p>
+    <button onclick="addClicks(1)" class="colored">Click</button>
     <button onclick="buyClicker(0)" class="colored">
       Autoclicker [<span id="autoclickerprice">20</span>] -- <span id="autoclickers">0</span>
     </button>
     <button onclick="buyClicker(1)" class="colored">
       Megaclicker [<span id="megaclickerprice">250</span>] -- <span id="megaclickers">0</span>
     </button>
-    <p>
-      Rebirths: <span id="rebirths">0</span>
-    </p>
+    <button id="unlock2_1" onclick="buyClicker(2)" class="colored" style="display:none;">
+      Gigaclicker [<span id="gigaclickerprice">20000</span>] -- <span id="gigaclickers">0</span>
+    </button>
+    <button id="unlock2_2" onclick="buyClicker(3)" class="colored" style="display:none;">
+      Teraclicker [<span id="teraclickerprice">15000000</span>] -- <span id="teraclickers">0</span>
+    </button>
+
+    <p>Rebirths: <span id="rebirths">0</span></p>
     <button onclick="rebirth()" class="colored">
       Rebirths available [<span id="rebirthsavailable">0</span>]
     </button>
+
+    <p id="unlock1_1" style="display:none;">
+      Ascensions: <span id="ascensions">0</span>
+    </p>
+    <button id="unlock1_2" onclick="ascend()" class="colored" style="display:none;">
+      Ascensions available [<span id="ascensionsavailable">0</span>]
+    </button>
+
     <script>
-      var clicks = 0
-      var autoclickers = 0
-      var autoclickerprice = 20
-      var megaclickers = 0
-      var megaclickerprice = 250
-      var rebirths = 0
-      var rebirthsavailable = 0
+      var clicks = 0;
+      var autoclickers = 0;
+      var autoclickerprice = 20;
+      var megaclickers = 0;
+      var megaclickerprice = 250;
+      var gigaclickers = 0;
+      var gigaclickerprice = 20000;
+      var teraclickers = 0;
+      var teraclickerprice = 15000000;
+
+      var rebirths = 0;
+      var rebirthsavailable = 0;
+
+      var ascensions = 0;
+      var ascensionsavailable = 0;
 
       function addClicks(amount) {
-        clicks = clicks + amount
-        refreshValues()
+        clicks += amount;
+        refreshValues();
       }
 
       function buyClicker(clickerid) {
         if (clickerid === 0 && clicks >= autoclickerprice) {
-          clicks = clicks - autoclickerprice
-          autoclickerprice = Math.round(autoclickerprice*1.2)
-          autoclickers = autoclickers + 1
-          refreshValues()
+          clicks -= autoclickerprice;
+          autoclickerprice = Math.round(autoclickerprice * 1.2);
+          autoclickers += 1;
         }
         if (clickerid === 1 && clicks >= megaclickerprice) {
-          clicks = clicks - megaclickerprice
-          megaclickerprice = Math.round(megaclickerprice*1.18)
-          megaclickers = megaclickers + 1
-          refreshValues()
+          clicks -= megaclickerprice;
+          megaclickerprice = Math.round(megaclickerprice * 1.18);
+          megaclickers += 1;
         }
+        if (clickerid === 2 && clicks >= gigaclickerprice) {
+          clicks -= gigaclickerprice;
+          gigaclickerprice = Math.round(gigaclickerprice * 1.16);
+          gigaclickers += 1;
+        }
+        if (clickerid === 3 && clicks >= teraclickerprice) {
+          clicks -= teraclickerprice;
+          teraclickerprice = Math.round(teraclickerprice * 1.14);
+          teraclickers += 1;
+        }
+        refreshValues();
       }
 
       function rebirth() {
         if (rebirthsavailable > 0) {
-          rebirths = rebirths + rebirthsavailable
-          rebirthsavailable = 0
-          clicks = 0
-          autoclickers = 0
-          autoclickerprice = 20
-          megaclickers = 0
-          megaclickerprice = 250
-          refreshValues()
+          rebirths += rebirthsavailable;
+          rebirthsavailable = 0;
+          clicks = 0;
+          autoclickers = 0;
+          autoclickerprice = 20;
+          megaclickers = 0;
+          megaclickerprice = 250;
+          gigaclickers = 0;
+          gigaclickerprice = 20000;
+          teraclickers = 0;
+          teraclickerprice = 15000000;
+
+          // Unlock Ascensions if rebirths >= 1000
+          if (rebirths >= 1000) {
+            document.getElementById("unlock1_1").style.display = "block";
+            document.getElementById("unlock1_2").style.display = "inline";
+          }
+
+          refreshValues();
+        }
+      }
+
+      function ascend() {
+        if (ascensionsavailable > 0) {
+          ascensions += ascensionsavailable;
+          ascensionsavailable = 0;
+          clicks = 0;
+          autoclickers = 0;
+          autoclickerprice = 20;
+          megaclickers = 0;
+          megaclickerprice = 250;
+          gigaclickers = 0;
+          gigaclickerprice = 20000;
+          teraclickers = 0;
+          teraclickerprice = 15000000;
+          rebirths = 0;
+          rebirthsavailable = 0;
+          refreshValues();
         }
       }
 
       function refreshValues() {
-        document.getElementById("clicks").innerHTML = clicks
-        document.getElementById("autoclickers").innerHTML = autoclickers
-        document.getElementById("autoclickerprice").innerHTML = autoclickerprice
-        document.getElementById("megaclickers").innerHTML = megaclickers
-        document.getElementById("megaclickerprice").innerHTML = megaclickerprice
-        document.getElementById("rebirths").innerHTML = rebirths
-        document.getElementById("rebirthsavailable").innerHTML = rebirthsavailable
+        document.getElementById("clicks").innerHTML = clicks;
+        document.getElementById("autoclickers").innerHTML = autoclickers;
+        document.getElementById("autoclickerprice").innerHTML = autoclickerprice;
+        document.getElementById("megaclickers").innerHTML = megaclickers;
+        document.getElementById("megaclickerprice").innerHTML = megaclickerprice;
+        document.getElementById("gigaclickers").innerHTML = gigaclickers;
+        document.getElementById("gigaclickerprice").innerHTML = gigaclickerprice;
+        document.getElementById("teraclickers").innerHTML = teraclickers;
+        document.getElementById("teraclickerprice").innerHTML = teraclickerprice;
+        document.getElementById("rebirths").innerHTML = rebirths;
+        document.getElementById("rebirthsavailable").innerHTML = rebirthsavailable;
+        document.getElementById("ascensions").innerHTML = ascensions;
+        document.getElementById("ascensionsavailable").innerHTML = ascensionsavailable;
+
+        // Show Gigaclicker button when you can afford it or already own one
+        if (clicks >= gigaclickerprice || gigaclickers > 0) {
+          document.getElementById("unlock2_1").style.display = "inline";
+        }
+        // Show Teraclicker button when you can afford it or already own one
+        if (clicks >= teraclickerprice || teraclickers > 0) {
+          document.getElementById("unlock2_2").style.display = "inline";
+        }
       }
 
       setInterval(function() {
-        clicks = clicks + (rebirths + 1)*(autoclickers + 5*megaclickers)
-        rebirthsavailable = 3*Math.sqrt(clicks/10000)
-        refreshValues()
-      }, 1000)
+        const income =
+          (20 * ascensions + 1) *
+          (rebirths + 1) *
+          (autoclickers +
+            5 * megaclickers +
+            20 * gigaclickers +
+            100 * teraclickers);
+        clicks += income;
+
+        rebirthsavailable = Math.floor(
+          (5 * ascensions + 1) * 3 * Math.sqrt(clicks / 10000)
+        );
+        if (rebirths >= 1000) {
+          ascensionsavailable = Math.floor(4 * Math.sqrt(clicks / 100000));
+        }
+
+        refreshValues();
+      }, 1000);
     </script>
   </body>
 </html>
