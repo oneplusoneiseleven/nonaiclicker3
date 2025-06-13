@@ -22,13 +22,38 @@
     <button onclick="addClicks(1)" class="colored">
       Click
     </button>
+    <button>
+      Autoclicker [$<span id="autoclickerprice">20</span>] -- <span id="autoclickers">0</span>
+    </button>
     <script>
       var clicks = 0
+      var autoclickers = 0
+      var autoclickerprice = 20
 
       function addClicks(amount) {
         clicks = clicks + amount
         document.getElementById("clicks").innerHTML = clicks
       }
+
+      function buyClicker(clickerid) {
+        if (clickerid === 0 && clicks >= autoclickerprice) {
+          clicks = clicks - autoclickerprice
+          autoclickerprice = Math.round(autoclickerprice*1.2)
+          autoclickers = autoclickers + 1
+          refreshValues()
+        }
+      }
+
+      function refreshValues() {
+        document.getElementById("clicks").innerHTML = clicks
+        document.getElementById("autoclickers").innerHTML = autoclickers
+        document.getElementById("autoclickerprice").innerHTML = autoclickerprice
+      }
+
+      setInterval(function() {
+        clicks = clicks + autoclickers
+        document.getElementById("clicks").innerHTML = clicks
+      }, 1000)
     </script>
   </body>
 </html>
