@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+    }
+    .colored {
+      background-color: midnightblue;
+      color: white;
+    }
+  </style>
+  <head>
+    <title>
+      Rebalanced clicker game
+    </title>
+  </head>
+  <body>
+    <p>
+      Clicks: <span id="clicks">0</span>
+    </p>
+    <button onclick="addClicks(1)" class="colored">
+      Click
+    </button>
+    <script>
+      var clicks = 0
+
+      function addClicks(amount) {
+        clicks = clicks + amount
+        document.getElementById("clicks").innerHTML = clicks
+      }
+    </script>
+  </body>
+</html>
