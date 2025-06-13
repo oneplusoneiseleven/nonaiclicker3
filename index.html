@@ -23,10 +23,16 @@
       Click
     </button>
     <button onclick="buyClicker(0)" class="colored">
-      Autoclicker [$<span id="autoclickerprice">20</span>] -- <span id="autoclickers">0</span>
+      Autoclicker [<span id="autoclickerprice">20</span>] -- <span id="autoclickers">0</span>
     </button>
     <button onclick="buyClicker(1)" class="colored">
-      Megaclicker [$<span id="megaclickerprice">250</span> -- <span id="megaclickers">0</span>
+      Megaclicker [<span id="megaclickerprice">250</span>] -- <span id="megaclickers">0</span>
+    </button>
+    <p>
+      Rebirths: <span id="rebirths">0</span>
+    </p>
+    <button>
+      Rebirths available [<span id="rebirthsavailable">0</span>]
     </button>
     <script>
       var clicks = 0
@@ -34,6 +40,8 @@
       var autoclickerprice = 20
       var megaclickers = 0
       var megaclickerprice = 250
+      var rebirths = 0
+      var rebirthsavailable = 0
 
       function addClicks(amount) {
         clicks = clicks + amount
@@ -55,17 +63,32 @@
         }
       }
 
+      function rebirth() {
+        if (!rebirthsavailable === 0) {
+          rebirths = rebirths + rebirthsavailable
+          rebirthsavailable = 0'
+          clicks = 0
+          autoclickers = 0
+          autoclickerprice = 20
+          megaclickers = 0
+          megaclickerprice = 250
+          refreshValues()
+        }
+
       function refreshValues() {
         document.getElementById("clicks").innerHTML = clicks
         document.getElementById("autoclickers").innerHTML = autoclickers
         document.getElementById("autoclickerprice").innerHTML = autoclickerprice
         document.getElementById("megaclickers").innerHTML = megaclickers
         document.getElementById("megaclickerprice").innerHTML = megaclickerprice
+        document.getElementById("rebirths").innerHTML = rebirths
+        document.getElementById("rebirthsavailable").innerHTML = rebirthsavailable
       }
 
       setInterval(function() {
-        clicks = clicks + (autoclickers + 5*megaclickers)
-        document.getElementById("clicks").innerHTML = clicks
+        clicks = clicks + (rebirths + 1)*(autoclickers + 5*megaclickers)
+        rebirthsavailable = 3*Math.sqrt(clicks/10000)
+        refreshValues()
       }, 1000)
     </script>
   </body>
